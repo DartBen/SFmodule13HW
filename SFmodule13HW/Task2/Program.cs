@@ -33,14 +33,12 @@ internal class Program
             for (int i = 0; i < 10; i++)
                 WriteLine(sortedWordsCount.ElementAt(i).Key + " : " + sortedWordsCount.ElementAt(i).Value + " раз");
 
+            //моё решение
             WriteLine("\nМоё решение");
             Dictionary<string, long> MaxCountedWords = GetMaxCountedWords(wordsCount, 10);
 
             foreach (var word in MaxCountedWords)
                 WriteLine(word.Key + " : " + word.Value + " раз");
-
-
-
         }
         catch (Exception exception)
         {
@@ -53,20 +51,16 @@ internal class Program
         Dictionary<string, long> maxCountedWords = new Dictionary<string, long>();
 
         LinkedList<WordCount> countList = new LinkedList<WordCount>();
-        int maxFindedValue = 0;
-        long count = 0;
 
         foreach (var word in inputDict)
         {
-            if (countList.Count == 0 || word.Value >= countList.First?.Value?.value)
+            if (countList.Count == 0 || word.Value >= countList.Last?.Value?.value)
             {
-                count++;
-
                 LinkedListAddWord(ref countList, new WordCount(word.Value, word.Key));
 
                 while (countList.Count > arrayLenght)
                 {
-                    countList.RemoveFirst();
+                    countList.RemoveLast();
                 }
             }
         }
@@ -83,6 +77,33 @@ internal class Program
         return maxCountedWords;
     }
 
+    static void LinkedListAddWord(ref LinkedList<WordCount> inputList, WordCount newWord)
+    {
+        var count = inputList.Count;
+
+        switch (count)
+        {
+            case 0:
+                inputList.AddFirst(newWord);
+                break;
+
+            default:
+                WordCount place = inputList.Last.ValueRef;
+
+                for (int i = 0; i <count; i++)
+                {
+                    if (newWord.value > inputList.ElementAt(i).value)
+                    {
+                        place = inputList.ElementAt(i);
+                        break;
+                    }
+                }
+
+                LinkedListNode<WordCount> current = inputList.Find(place);
+                inputList.AddBefore(current, newWord);
+                break;
+        }
+    }
     class WordCount
     {
         public long value { get; }
@@ -94,35 +115,4 @@ internal class Program
             key = Key;
         }
     }
-
-    static void LinkedListAddWord(ref LinkedList<WordCount> inputList, WordCount newWord)
-    {
-        var count = inputList.Count;
-
-
-        switch (count)
-        {
-            case 0:
-                inputList.AddFirst(newWord);
-                break;
-
-            default:
-                long countInList = 0;
-
-                WordCount place = inputList.First.ValueRef;
-                for (int i = 1; i < count; i++)
-                {
-                    if (newWord.value > inputList.ElementAt(i).value)
-                    {
-                        place = inputList.ElementAt(i);
-                        continue;
-                    }
-                }
-
-                LinkedListNode<WordCount> current = inputList.Find(place);
-                inputList.AddAfter(current, newWord);
-                break;
-        }
-    }
-
 }
