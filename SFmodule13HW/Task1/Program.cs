@@ -4,7 +4,6 @@ internal class Program
 {
     private static void Main(string[] args)
     {
-
         try
         {
             //подготовка без учёта времени
@@ -38,7 +37,6 @@ internal class Program
         }
     }
 
-
     private static List<string> ArrStringShiftToList(string[] strings)
     {
         List<string> ListWords = new List<string>();
@@ -58,6 +56,4 @@ internal class Program
         }
         return LinkedListWords;
     }
-
-
 }
